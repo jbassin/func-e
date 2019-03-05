@@ -1,0 +1,22 @@
+{
+  "name": "func-e",
+  "version": "0.0.1",
+  "description": "A functional functional library.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbassin/func-e.git"
+  },
+  "keywords": [
+    "functional"
+  ],
+  "author": "Joshua Bassin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbassin/func-e/issues"
+  },
+  "homepage": "https://github.com/jbassin/func-e#readme"
+}

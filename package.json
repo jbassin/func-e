@@ -1,6 +1,6 @@
 {
   "name": "func-e",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A functional functional library.",
   "main": "index.js",
   "scripts": {

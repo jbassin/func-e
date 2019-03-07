@@ -1,6 +1,13 @@
+const { Option, isOption } = require('../option/option');
+
 const uncurriedReduceRight = (reducer, initial, data, step) => {
     if (data.length === step) return initial;
-    return uncurriedReduceRight(reducer, reducer(initial, data[data.length - 1 - step]), data, step + 1);
+    const item = data[data.length - 1 - step];
+    if (isOption(item)) {
+        if (item.isSome) return uncurriedReduceRight(reducer, reducer(initial, item.value), data, step + 1);
+        else return uncurriedReduceRight(reducer, initial, data, step + 1);
+    }
+    return uncurriedReduceRight(reducer, reducer(initial, item), data, step + 1);
 };
 
 const unsteppedUncurriedReduceRight = (reducer, initial, data) => {
@@ -9,7 +16,12 @@ const unsteppedUncurriedReduceRight = (reducer, initial, data) => {
 
 const uncurriedReduceLeft = (reducer, initial, data, step) => {
     if (data.length === step) return initial;
-    return uncurriedReduceLeft(reducer, reducer(initial, data[step]), data, step + 1);
+    const item = data[step];
+    if (isOption(item)) {
+        if (item.isSome) return uncurriedReduceLeft(reducer, reducer(initial, item.value), data, step + 1);
+        else return uncurriedReduceLeft(reducer, initial, data, step + 1);
+    }
+    return uncurriedReduceLeft(reducer, reducer(initial, item), data, step + 1);
 };
 
 const unsteppedUncurriedReduceLeft = (reducer, initial, data) => {

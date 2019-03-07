@@ -1,8 +1,3 @@
-const optionTypeEnum = {
-    None: false,
-    Some: true,
-};
-
 class Option {
     constructor(item) {
         if (item instanceof Option) this._value = item.value;

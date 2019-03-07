@@ -3,32 +3,39 @@ const optionTypeEnum = {
     Some: true,
 };
 
-const createOption = (item) => {
-    const func_e_option = true;
-    const optionType = (typeof item === 'undefined') || (item === null) ? optionTypeEnum.None : optionTypeEnum.Some;
-    const optionValue = item;
-    const getOrElse = (orElse) => optionType === optionTypeEnum.None ? orElse : optionValue;
-    return {
-        func_e_option,
-        optionType,
-        optionValue,
-        getOrElse,
+class Option {
+    constructor(item) {
+        if (item instanceof Option) this._value = item.value;
+        else this._value = item;
+    };
+
+    get value() {
+        return this._value;
+    };
+
+    get type() {
+        return typeof this._value;
+    };
+
+    get isSome() {
+        return !((typeof this._value === 'undefined') || (this._value === null));
     }
-};
+
+    get isNone() {
+        return !this.isSome;
+    }
+
+    getOrElse(orElse) {
+        return this.isSome ? this._value : orElse;
+    };
+}
 
 const isOption = (item) => {
     if ((typeof item === 'undefined') || (item === null)) return false;
-    if (item.func_e_option == null) return false;
-    return item.func_e_option;
-};
-
-const isSome = (item) => {
-    if (!isOption(item)) return false;
-    return item.optionType;
+    return (item instanceof Option);
 };
 
 module.exports = {
-    createOption,
+    Option,
     isOption,
-    isSome,
 };

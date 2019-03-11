@@ -23,6 +23,11 @@ class Option {
     getOrElse(orElse) {
         return this.isSome ? this._value : orElse;
     };
+
+    toString() {
+        if (this.isSome) return `Just ${this._value.toString()}`;
+        return 'None';
+    }
 }
 
 const isOption = (item) => {

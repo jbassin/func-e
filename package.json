@@ -1,0 +1,45 @@
+{
+  "name": "func-e",
+  "version": "0.1.0",
+  "description": "A functional functional library.",
+  "files": [
+    "lib/**/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --config jestconfig.json",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "cleanup": "npm run lint; npm run format",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbassin/func-e.git"
+  },
+  "keywords": [
+    "functional"
+  ],
+  "author": "Joshua Bassin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbassin/func-e/issues"
+  },
+  "homepage": "https://github.com/jbassin/func-e#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "jest": "^24.4.0",
+    "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.3.3333"
+  }
+}

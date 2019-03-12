@@ -5,6 +5,8 @@ import curry from './curry/curry';
 
 import { cReduce, cReduceInitial, cReduceInitialRight, cReduceRight, reduce, reduceInitial, reduceInitialRight, reduceRight } from './reduce/reduce';
 
+import Tailcall from './tailcall/tailcall';
+
 export = {
   // Functions
   isItem,
@@ -21,4 +23,5 @@ export = {
 
   // Classes
   Item,
+  Tailcall,
 };

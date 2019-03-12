@@ -20,7 +20,7 @@ test('reduceRight: sum to 0', () => {
   expect(cReduceRight((a: number, b: number) => a + b, 0, data)).toBe(0);
 });
 
-// test('Reduce: test tailcall functionality', () => {
-//   const data = Array.from({length: 1000000}, () => 1);
-//   expect(reduceRight((a, b) => a + b, 0, data)).toBe(1000000);
-// });
+test('Reduce: test tailcall functionality', () => {
+  const data = Array.from({length: 1000000}, () => 1);
+  expect(cReduce((a: number, b: number) => a + b, 0, data)).toBe(1000000);
+});

@@ -1,4 +1,5 @@
 import curry from '../curry/curry';
+import Tailcall from '../tailcall/tailcall';
 
 function unsteppedReduce<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
@@ -8,7 +9,7 @@ function unsteppedReduce<Data, Initial>(
   fromRight: boolean,
 ): Initial {
   if (step === data.length) {
-    return initial;
+    (unsteppedReduce as any).tailcall.done(initial);
   }
 
   let currentItem: any = null;
@@ -18,7 +19,7 @@ function unsteppedReduce<Data, Initial>(
     currentItem = data[step];
   }
 
-  return unsteppedReduce(
+  return (unsteppedReduce as any).tailcall.next(
     reducer,
     reducer(initial, currentItem),
     data,
@@ -33,7 +34,8 @@ function steppedReduce<Data, Initial>(
   data: Data[],
   fromRight: boolean,
 ): Initial {
-  return unsteppedReduce<Data, Initial>(reducer, initial, data, 0, fromRight);
+  const tailcallUnsteppedReduce: Tailcall = new Tailcall(unsteppedReduce);
+  return tailcallUnsteppedReduce.run(reducer, initial, data, 0, fromRight);
 }
 
 export function reduce<Data, Initial>(

@@ -58,18 +58,18 @@ export const cReduceRight = curry(reduceRight);
 
 export function reduceInitial<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
-  data: Initial[],
+  data: Data[],
 ): Initial {
-  return steppedReduce<Data, Initial>(reducer, data[0], data as unknown as Data[], false);
+  return steppedReduce<Data, Initial>(reducer, data[0] as unknown as Initial, data, false);
 }
 
 export const cReduceInitial = curry(reduceInitial);
 
 export function reduceInitialRight<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
-  data: Initial[],
+  data: Data[],
 ): Initial {
-  return steppedReduce<Data, Initial>(reducer, data[0], data as unknown as Data[], true);
+  return steppedReduce<Data, Initial>(reducer, data[0] as unknown as Initial, data, true);
 }
 
 export const cReduceInitialRight = curry(reduceInitialRight);

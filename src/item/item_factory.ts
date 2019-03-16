@@ -1,19 +1,19 @@
 import Item from './item';
 
-export default class ItemFactory {
-  private readonly predicate: (tester: any) => boolean;
+export default class ItemFactory<T> {
+  private readonly predicate: (tester: T) => boolean;
 
-  constructor(predicate?: (tester: any) => boolean) {
+  constructor(predicate?: (tester: T) => boolean) {
     if (predicate) {
       this.predicate = predicate;
     } else {
-      this.predicate = (tester: any): boolean => {
+      this.predicate = (tester: T): boolean => {
         return tester !== null && tester !== undefined;
       };
     }
   }
 
-  public new<T>(item: T): Item<T> {
+  public new(item: T | Item<T>): Item<T> {
     return new Item<T>(item, this.predicate);
   }
 }

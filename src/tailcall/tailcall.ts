@@ -1,4 +1,4 @@
-interface ITailcallFunc {
+export interface ITailcallFunc {
   tailcall: any;
   (...args: any[]): any;
 }

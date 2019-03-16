@@ -8,7 +8,7 @@ export default class ItemFactory {
       this.predicate = predicate;
     } else {
       this.predicate = (tester: any): boolean => {
-        return (tester !== null && tester !== undefined);
+        return tester !== null && tester !== undefined;
       };
     }
   }
@@ -16,5 +16,4 @@ export default class ItemFactory {
   public new<T>(item: T): Item<T> {
     return new Item<T>(item, this.predicate);
   }
-
 }

@@ -1,5 +1,5 @@
 import curry from '../curry/curry';
-import Tailcall from '../tailcall/tailcall';
+import Tailcall, { ITailcallFunc } from '../tailcall/tailcall';
 
 function unsteppedReduce<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
@@ -9,7 +9,7 @@ function unsteppedReduce<Data, Initial>(
   fromRight: boolean,
 ): Initial {
   if (step === data.length) {
-    (unsteppedReduce as any).tailcall.done(initial);
+    return (unsteppedReduce as ITailcallFunc).tailcall.done(initial);
   }
 
   let currentItem: any = null;
@@ -19,7 +19,7 @@ function unsteppedReduce<Data, Initial>(
     currentItem = data[step];
   }
 
-  return (unsteppedReduce as any).tailcall.next(
+  return (unsteppedReduce as ITailcallFunc).tailcall.next(
     reducer,
     reducer(initial, currentItem),
     data,
@@ -62,7 +62,12 @@ export function reduceInitial<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
   data: Data[],
 ): Initial {
-  return steppedReduce<Data, Initial>(reducer, data[0] as unknown as Initial, data, false);
+  return steppedReduce<Data, Initial>(
+    reducer,
+    (data[0] as unknown) as Initial,
+    data,
+    false,
+  );
 }
 
 export const cReduceInitial = curry(reduceInitial);
@@ -71,7 +76,12 @@ export function reduceInitialRight<Data, Initial>(
   reducer: (accumulator: Initial, concatenator: Data) => Initial,
   data: Data[],
 ): Initial {
-  return steppedReduce<Data, Initial>(reducer, data[0] as unknown as Initial, data, true);
+  return steppedReduce<Data, Initial>(
+    reducer,
+    (data[0] as unknown) as Initial,
+    data,
+    true,
+  );
 }
 
 export const cReduceInitialRight = curry(reduceInitialRight);

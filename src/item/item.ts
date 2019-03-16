@@ -10,7 +10,7 @@ export default class Item<T> {
       this.predicate = predicate;
     } else {
       this.predicate = (tester: T): boolean => {
-        return (tester !== null && tester !== undefined)
+        return tester !== null && tester !== undefined;
       };
     }
 

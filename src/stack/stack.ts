@@ -38,13 +38,17 @@ export default class ItemStack<T> {
   }
 
   private sanitize(array: T[]): Array<Item<T>> {
-    return reduce((acc: Array<Item<T>>, con: T): Array<Item<T>> => {
-      const item: Item<T> = this.factory.new(con);
-      if (item.isSome) {
-        return acc.concat([item]);
-      } else {
-        return acc;
-      }
-    }, [], array);
+    return reduce(
+      (acc: Array<Item<T>>, con: T): Array<Item<T>> => {
+        const item: Item<T> = this.factory.new(con);
+        if (item.isSome) {
+          return acc.concat([item]);
+        } else {
+          return acc;
+        }
+      },
+      [],
+      array,
+    );
   }
 }

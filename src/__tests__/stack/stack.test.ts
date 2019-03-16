@@ -22,7 +22,7 @@ test('Iterator: Successfully iterates through stack', () => {
 
   let c = iter.next;
   let i = 1;
-  while( c.type !== 'none' ) {
+  while (c.type !== 'none') {
     expect(c.getOrElse(null)).toBe(i);
     i += 1;
     c = iter.next;
@@ -33,7 +33,7 @@ test('Iterator: Successfully iterates through stack', () => {
 
   c = iter.prev;
   i = 5;
-  while ( c.type !== 'none' ) {
+  while (c.type !== 'none') {
     expect(c.getOrElse(null)).toBe(i);
     i -= 1;
     c = iter.prev;

@@ -21,6 +21,6 @@ test('reduceRight: sum to 0', () => {
 });
 
 test('Reduce: test tailcall functionality', () => {
-  const data = Array.from({length: 1000000}, () => 1);
+  const data = Array.from({ length: 1000000 }, () => 1);
   expect(cReduce((a: number, b: number) => a + b, 0, data)).toBe(1000000);
 });

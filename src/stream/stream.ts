@@ -73,13 +73,19 @@ export class Stream<T> {
       next: (next: T) => {
         if (!newSiphon.isComplete) {
           let newNext = next;
-          this._hijacks.forEach(element => {
-            if (element.type === HijackType.Predicate && !(element as IHijackPredicate<T>).predicate(newNext)) {
-              return;
-            } else {
-              newNext = (element as IHijackTransform<T>).transform(newNext);
+          for (let i = 0; i < this._hijacks.length; i++) {
+            const element = this._hijacks[i];
+            switch(element.type) {
+              case HijackType.Predicate:
+                if (!(element as IHijackPredicate<T>).predicate(newNext)) {
+                  return;
+                }
+                break;
+              case HijackType.Transform:
+                newNext = (element as IHijackTransform<T>).transform(newNext);
+                break;
             }
-          });
+          }
           siphon.next(newNext);
         }
       },

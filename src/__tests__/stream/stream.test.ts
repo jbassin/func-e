@@ -46,13 +46,10 @@ test('Stream: stream stops after complete', () => {
     siphon.next(0);
     siphon.complete();
     siphon.next(1);
+    siphon.complete();
   });
 
-  stream.siphon({
-    next: x => {
-      expect(x).toBe(0);
-    },
-    error: () => null,
-    complete: () => null,
+  stream.siphon(x => {
+    expect(x).toBe(0);
   });
 });

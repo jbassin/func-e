@@ -2,7 +2,7 @@ import ItemFactory from '../../item/item_factory';
 import ItemStack from '../../stack/stack';
 
 test('Stack: Accepts inputs and ejects correctly', () => {
-  const a = new ItemStack(new ItemFactory());
+  const a = new ItemStack(new ItemFactory<number>());
   a.add(1);
   a.add(2);
   a.add(3, 4, 5);

@@ -5,9 +5,9 @@ import ItemStackIterator from './stack_iterator';
 
 export default class ItemStack<T> {
   private stack: Array<Item<T>> = [];
-  private factory: ItemFactory;
+  private factory: ItemFactory<T>;
 
-  constructor(factory: ItemFactory, ...items: T[]) {
+  constructor(factory: ItemFactory<T>, ...items: T[]) {
     this.factory = factory;
     this.add(...items);
   }

@@ -19,7 +19,6 @@ export class Stream<T> {
     this._pump = pump;
   }
 
-
   public siphon(siphon: ISiphon<T> | INext<T>): void {
     let newSiphon = siphon;
     if ((siphon as ISiphon<T>).next === undefined) {

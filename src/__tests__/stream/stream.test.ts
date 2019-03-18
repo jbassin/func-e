@@ -38,3 +38,21 @@ test('Stream: create stream from arraylike', () => {
     i++;
   });
 });
+
+test('Stream: stream stops after complete', () => {
+  const stream = new Stream(siphon => {
+    siphon.next(0);
+    siphon.next(0);
+    siphon.next(0);
+    siphon.complete();
+    siphon.next(1);
+  });
+
+  stream.siphon({
+    next: x => {
+      expect(x).toBe(0);
+    },
+    error: () => null,
+    complete: () => null,
+  });
+});

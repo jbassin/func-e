@@ -1,3 +1,5 @@
+import { anyTypeAnnotation } from "@babel/types";
+
 export interface IPump<T> {
   (siphon: ISiphon<T>): void;
 }
@@ -6,6 +8,10 @@ export interface ISiphon<T> {
   next: (next: T) => void;
   error: (error: any) => void;
   complete: () => void;
+}
+
+interface ISiphonExtended {
+  isComplete: boolean;
 }
 
 export interface INext<T> {
@@ -28,6 +34,30 @@ export class Stream<T> {
         complete: () => {},
       }
     }
-    this._pump(newSiphon as ISiphon<T>);
+    this.runPump(newSiphon as ISiphon<T>);
+  }
+
+  private runPump(siphon: ISiphon<T>): void {
+    let newSiphon: ISiphon<T> & ISiphonExtended = {
+      isComplete: false,
+      next: (next: T) => {
+        if (!newSiphon.isComplete) {
+          siphon.next(next);
+        }
+      },
+      error: (error: any) => {
+        if (!newSiphon.isComplete) {
+          siphon.error(error);
+        }
+        siphon.error
+      },
+      complete: () => {
+        if (!newSiphon.isComplete) {
+          siphon.complete();
+          newSiphon.isComplete = true;
+        }
+      }
+    }
+    this._pump(newSiphon);
   }
 }

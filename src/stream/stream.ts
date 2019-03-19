@@ -15,28 +15,17 @@ interface ISiphonExtended {
 
 export type INext<T> = (next: T) => void;
 
-export type INextShim<T> = (siphon: ISiphon<T>, next: T) => void;
-
 export class Stream<T> {
   private readonly _pump: IPump<T>;
 
-  constructor(pump: IPump<T>, nextShim?: INextShim<T>) {
-    let newShim: INextShim<T>;
-    if (nextShim) {
-      newShim = nextShim;
-    } else {
-      newShim = (siphon: ISiphon<T>, next: T) => {
-        siphon.next(next);
-      };
-    }
-
+  constructor(pump: IPump<T>) {
     this._pump = (siphon: ISiphon<T>) => {
       let shim: ISiphon<T> & ISiphonExtended;
       shim = {
         isComplete: false,
         next: x => {
           if (!shim.isComplete) {
-            newShim(siphon, x);
+            siphon.next(x);
           }
         },
         error: x => {
@@ -67,7 +56,9 @@ export class Stream<T> {
         error: (x: any) => {
           throw new Error(x);
         },
-        complete: (): void => { return; },
+        complete: (): void => {
+          return;
+        },
       };
     }
     this._pump(newSiphon as ISiphon<T>);

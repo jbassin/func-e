@@ -4,9 +4,9 @@ import { IPump, ISiphon, Stream } from '../stream';
 type IReducer<T, R> = (accumulator: R, concatenator: T) => R;
 
 export default function scan<T, R>(
-  stream: Stream<T>,
   scanner: IReducer<T, R>,
-  initial: R
+  initial: R,
+  stream: Stream<T>,
 ): Stream<R> {
   const nextShim = () => {
     let accumulator = initial;

@@ -3,8 +3,8 @@ import map from '../../stream/map/map';
 
 test('Map (Stream): create mapped stream from existing stream', () => {
   const stream = from([0, 1, 2, 3, 4, 5]);
-  const mappedStream = map(stream, x => x + 1);
-  const revertedStream = map(mappedStream, x => x - 1);
+  const mappedStream = map(x => x + 1, stream);
+  const revertedStream = map(x => x - 1, mappedStream);
 
   let i = 0;
   stream.siphon(x => {

@@ -6,6 +6,12 @@
       },
       "no-console": {
          "severity": "off"
+      },
+      "no-unused-expression": {
+         "severity": "off"
+      },
+      "variable-name": {
+         "severity": "off"
       }
    }
 }

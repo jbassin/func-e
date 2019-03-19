@@ -1,6 +1,6 @@
-export interface IPump<T> {
-  (siphon: ISiphon<T>): void;
-}
+import { ISiphon } from './stream';
+
+export type IPump<T> = (siphon: ISiphon<T>) => void;
 
 export interface ISiphon<T> {
   next: (next: T) => void;
@@ -13,46 +13,50 @@ interface ISiphonExtended {
   isComplete: boolean;
 }
 
-export interface INext<T> {
-  (next: T): void;
-}
+export type INext<T> = (next: T) => void;
 
-export enum HijackType {
-  Transform,
-  Predicate,
-}
-
-export interface IHijack<T> {
-  type: HijackType,
-}
-
-export interface IHijackPredicate<T> extends IHijack<T> {
-  predicate: (next: T) => boolean,
-}
-
-export interface IHijackTransform<T> extends IHijack<T> {
-  transform: (next: any) => T,
-}
+export type INextShim<T> = (siphon: ISiphon<T>, next: T) => void;
 
 export class Stream<T> {
-  private _pump: IPump<T>;
-  private _hijacks: IHijack<T>[];
+  private readonly _pump: IPump<T>;
 
-  constructor(pump: IPump<T>, hijacks?: IHijack<T>[]) {
-    this._pump = pump;
-    if (hijacks) {
-      this._hijacks = hijacks;
+  constructor(pump: IPump<T>, nextShim?: INextShim<T>) {
+    let newShim: INextShim<T>;
+    if (nextShim) {
+      newShim = nextShim;
     } else {
-      this._hijacks = [];
+      newShim = (siphon: ISiphon<T>, next: T) => {
+        siphon.next(next);
+      };
     }
+
+    this._pump = (siphon: ISiphon<T>) => {
+      let shim: ISiphon<T> & ISiphonExtended;
+      shim = {
+        isComplete: false,
+        next: x => {
+          if (!shim.isComplete) {
+            newShim(siphon, x);
+          }
+        },
+        error: x => {
+          if (!shim.isComplete) {
+            siphon.error(x);
+          }
+        },
+        complete: () => {
+          if (!shim.isComplete) {
+            siphon.complete();
+            shim.isComplete = true;
+          }
+        },
+      };
+      pump(shim);
+    };
   }
 
   get pump(): IPump<T> {
     return this._pump;
-  }
-
-  get hijacks(): IHijack<T>[] {
-    return this._hijacks;
   }
 
   public siphon(siphon: ISiphon<T> | INext<T>): void {
@@ -60,48 +64,12 @@ export class Stream<T> {
     if ((siphon as ISiphon<T>).next === undefined) {
       newSiphon = {
         next: siphon as INext<T>,
-        error: (x) => { throw new Error(x); },
-        complete: () => {},
-      }
+        error: (x: any) => {
+          throw new Error(x);
+        },
+        complete: (): void => { return; },
+      };
     }
-    this.runPump(newSiphon as ISiphon<T>);
-  }
-
-  private runPump(siphon: ISiphon<T>): void {
-    let newSiphon: ISiphon<T> & ISiphonExtended = {
-      isComplete: false,
-      next: (next: T) => {
-        if (!newSiphon.isComplete) {
-          let newNext = next;
-          for (let i = 0; i < this._hijacks.length; i++) {
-            const element = this._hijacks[i];
-            switch(element.type) {
-              case HijackType.Predicate:
-                if (!(element as IHijackPredicate<T>).predicate(newNext)) {
-                  return;
-                }
-                break;
-              case HijackType.Transform:
-                newNext = (element as IHijackTransform<T>).transform(newNext);
-                break;
-            }
-          }
-          siphon.next(newNext);
-        }
-      },
-      error: (error: any) => {
-        if (!newSiphon.isComplete) {
-          siphon.error(error);
-        }
-        siphon.error
-      },
-      complete: () => {
-        if (!newSiphon.isComplete) {
-          siphon.complete();
-          newSiphon.isComplete = true;
-        }
-      }
-    }
-    this._pump(newSiphon);
+    this._pump(newSiphon as ISiphon<T>);
   }
 }

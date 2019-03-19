@@ -6,6 +6,15 @@
     "outDir": "./lib",
     "strict": true
   },
+  "typedocOptions": {
+    "compilerOptions": {
+      "normalTypeScriptOptions": "here"
+    },
+    "typedocOptions": {
+        "mode": "modules",
+        "out": "docs"
+    }
+  },
   "include": ["src"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

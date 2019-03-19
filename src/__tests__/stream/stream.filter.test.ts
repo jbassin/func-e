@@ -1,4 +1,4 @@
-import { from } from '../../stream/create';
+import { from } from '../../stream/create/create';
 import filter from '../../stream/filter/filter';
 import map from '../../stream/map/map';
 

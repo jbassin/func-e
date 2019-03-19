@@ -1,4 +1,4 @@
-import { from } from '../../stream/create';
+import { from } from '../../stream/create/create';
 import { Stream } from '../../stream/stream';
 
 test('Stream: extremely basic stream function', () => {

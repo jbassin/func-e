@@ -1,4 +1,4 @@
-import { from } from '../../stream/create';
+import { from } from '../../stream/create/create';
 import map from '../../stream/map/map';
 
 test('Map (Stream): create mapped stream from existing stream', () => {
